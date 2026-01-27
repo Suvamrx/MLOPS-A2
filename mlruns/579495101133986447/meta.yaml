@@ -1,0 +1,6 @@
+artifact_location: file:///F:/MLOPS-A2/mlruns/579495101133986447
+creation_time: 1769521511786
+experiment_id: '579495101133986447'
+last_update_time: 1769521511786
+lifecycle_stage: active
+name: cats-vs-dogs-cnn
