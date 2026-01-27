@@ -71,6 +71,13 @@ End-to-end MLOps pipeline for binary image classification (Cats vs Dogs) for a p
   - Error: `ValueError: not enough values to unpack (expected 3, got 2)`
   - Solution: Fixed train/val split logic in script.
 
+- **Pytest cannot find src modules in CI:**
+   - Error: `ModuleNotFoundError: No module named 'src'`
+   - Solution: Added a step to set PYTHONPATH to include src in the GitHub Actions workflow.
+- **Docker image tag must be lowercase for GHCR:**
+   - Error: `invalid tag ... repository name must be lowercase`
+   - Solution: Updated workflow to convert the image tag to all lowercase before building and pushing.
+
 ## How to Run
 1. Install dependencies:
    ```
