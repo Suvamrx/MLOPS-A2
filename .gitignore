@@ -91,6 +91,4 @@ venv.bak/
 
 # DVC
 /data/raw/
-/data/processed/
-*.dvc
 .dvc/
