@@ -1,3 +1,4 @@
+# End-to-end MLOps pipeline for binary image classification (Cats vs Dogs) using PyTorch, FastAPI, DVC, Docker, and GitHub Actions. Includes data versioning, preprocessing, model training, experiment tracking, API packaging, containerization, automated testing, and CI/CD deployment. Suitable for pet adoption platforms and MLOps coursework.
 # Cats vs Dogs MLOps Pipeline
 
 ## Project Overview
@@ -19,6 +20,7 @@ End-to-end MLOps pipeline for binary image classification (Cats vs Dogs) for a p
 - Created recommended folder structure
 - Initialized Git and DVC
 - Added `.gitignore` for Python, DVC, and environment files
+- Initialized local git repo and pushed to GitHub
 
 ### 2. Data Versioning
 - Downloaded Cats vs Dogs dataset from Kaggle
@@ -39,8 +41,18 @@ End-to-end MLOps pipeline for binary image classification (Cats vs Dogs) for a p
 - Evaluated model on test set with `src/evaluate.py`
 
 ### 5. Inference API
-- Added FastAPI and Uvicorn to `requirements.txt`
+- Added FastAPI, Uvicorn, and python-multipart to `requirements.txt`
 - Created `src/app.py` for REST API with `/health` and `/predict` endpoints
+- Tested API locally and in Docker
+
+### 6. Docker Packaging
+- Created `Dockerfile` for containerizing the FastAPI inference service
+- Built and ran Docker image locally
+
+### 7. Automated Testing & CI
+- Added unit tests for preprocessing and model inference in `tests/`
+- Set up GitHub Actions workflow for CI: installs dependencies, runs tests, builds Docker image
+- Pushed code to GitHub to trigger CI pipeline
 
 ## Issues Faced & Solutions
 - **DVC file ignored by git:**
@@ -92,11 +104,20 @@ End-to-end MLOps pipeline for binary image classification (Cats vs Dogs) for a p
    ```
 
 ## Next Steps
-- Add unit tests for preprocessing and inference
-- Create Dockerfile for API containerization
-- Set up CI/CD pipeline
-- Add deployment manifests (Kubernetes/Docker Compose)
-- Implement monitoring and logging
+
+1. Deployment Automation
+   - Add deployment manifests: Kubernetes YAML (Deployment, Service) or docker-compose.yml for local/VM deployment.
+   - Set up CD pipeline (GitHub Actions, ArgoCD, or Jenkins) to automate deployment on main branch changes.
+   - Implement post-deploy smoke tests (health and prediction endpoint checks).
+
+2. Monitoring & Logging
+   - Enable request/response logging in the inference API (excluding sensitive data).
+   - Track basic metrics: request count, latency (via logs, Prometheus, or in-app counters).
+   - Collect and log model performance metrics post-deployment.
+
+3. Final Submission
+   - Prepare a zip file with all source code, configuration files, trained model artifacts, and documentation.
+   - Record a short screen demo (<5 min) showing the MLOps workflow from code change to deployed prediction.
 
 ---
 For any issues, check the troubleshooting section above or reach out for help.
