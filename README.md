@@ -5,14 +5,26 @@
 End-to-end MLOps pipeline for binary image classification (Cats vs Dogs) for a pet adoption platform. Includes data versioning, model training, experiment tracking, packaging, containerization, and CI/CD setup.
 
 ## Folder Structure
-- `src/` — Python scripts (preprocessing, training, inference API)
-- `notebooks/` — Jupyter notebooks
+- `.dvc/` — DVC internal files and cache
+- `.github/workflows/` — CI/CD pipeline workflows (ci.yml, cd.yml)
+- `.vscode/` — VS Code settings
 - `data/` — Raw and processed datasets (DVC tracked)
-- `tests/` — Unit tests
-- `configs/` — Config files (DVC, MLflow, deployment)
-- `.github/workflows/` — CI/CD pipeline
-- `deployment/` — Deployment manifests
-- `models/` — Saved models
+  - `raw/` — Original dataset
+    - `training_set/cats/`, `training_set/dogs/`, `test_set/cats/`, `test_set/dogs/`
+  - `processed/` — Preprocessed images
+    - `train/cat/`, `train/dog/`, `val/cat/`, `val/dog/`, `test/cat/`, `test/dog/`
+- `deployment/` — Kubernetes manifests, smoke test script, sample image
+  - `deployment.yaml`, `service.yaml`, `smoke_test.py`, `batch_performance.py`, `batch_results.json`, `batch_test_images/`
+- `models/` — Saved model files (e.g., `cnn.pt`)
+- `src/` — Python source code
+  - `app.py`, `evaluate.py`, `preprocess.py`, `train.py`
+- `tests/` — Unit tests for preprocessing and model
+  - `test_preprocess.py`, `test_model.py`
+- `Dockerfile` — Containerization for inference API
+- `README.md` — Project documentation
+- `requirements.txt` — Python dependencies
+- `.gitignore` — Git ignore rules
+- `mlruns/` — MLflow experiment tracking
 
 ## Steps Completed
 
@@ -87,53 +99,93 @@ End-to-end MLOps pipeline for binary image classification (Cats vs Dogs) for a p
    - Error: `invalid tag ... repository name must be lowercase`
    - Solution: Updated workflow to convert the image tag to all lowercase before building and pushing.
 
+## Continuous Deployment (CD) Notes
+
+This project includes a GitHub Actions workflow (`.github/workflows/cd.yml`) for automated deployment to Kubernetes and post-deployment smoke tests. For cloud clusters (GKE, EKS, AKS), this workflow can deploy directly from GitHub Actions using a kubeconfig secret.
+
+## Post-Deployment Model Performance Tracking
+
+To evaluate model performance after deployment, run a batch of test images through the deployed API and compare predictions to true labels:
+
+1. Place a set of labeled test images in `deployment/batch_test_images/`.
+2. Edit `deployment/batch_performance.py` to list the filenames and true labels in the `image_labels` list.
+3. Run the script:
+  ```
+  python deployment/batch_performance.py
+  ```
+4. The script will log predictions, save results to `deployment/batch_results.json`, and print batch accuracy.
+
+This satisfies the post-deployment model performance tracking requirement of the assignment.
+
+**Local Cluster Limitation:**
+For local clusters (Docker Desktop, minikube), the cluster is not accessible from GitHub Actions runners. Therefore, the deployment step must be run manually:
+
+```
+kubectl apply -f deployment/deployment.yaml
+kubectl apply -f deployment/service.yaml
+```
+
+After deployment, run the smoke test script locally to verify health and prediction endpoints:
+
+```
+python deployment/smoke_test.py
+```
+
+This approach demonstrates the intended CD automation and provides a manual workaround for local environments, satisfying assignment requirements.
+
 ## How to Run
-1. Install dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
-2. Preprocess data:
-   ```
-   python src/preprocess.py
-   ```
-3. Track processed data with DVC:
-   ```
-   dvc add data/processed
-   git add data/processed.dvc .gitignore
-   git commit -m "Track processed data with DVC"
-   ```
-4. Train model:
-   ```
-   python src/train.py
-   ```
-5. Evaluate model:
-   ```
-   python src/evaluate.py
-   ```
-6. Run MLflow UI:
-   ```
-   mlflow ui
-   ```
-7. Run inference API:
-   ```
-   uvicorn src.app:app --reload
-   ```
 
-## Next Steps
+### 1. Install dependencies
+```
+pip install -r requirements.txt
+```
 
-1. Deployment Automation
-   - Add deployment manifests: Kubernetes YAML (Deployment, Service) or docker-compose.yml for local/VM deployment.
-   - Set up CD pipeline (GitHub Actions, ArgoCD, or Jenkins) to automate deployment on main branch changes.
-   - Implement post-deploy smoke tests (health and prediction endpoint checks).
+### 2. Preprocess data
+```
+python src/preprocess.py
+```
 
-2. Monitoring & Logging
-   - Enable request/response logging in the inference API (excluding sensitive data).
-   - Track basic metrics: request count, latency (via logs, Prometheus, or in-app counters).
-   - Collect and log model performance metrics post-deployment.
+### 3. Track processed data with DVC
+```
+dvc add data/processed
+git add data/processed.dvc .gitignore
+git commit -m "Track processed data with DVC"
+```
 
-3. Final Submission
-   - Prepare a zip file with all source code, configuration files, trained model artifacts, and documentation.
-   - Record a short screen demo (<5 min) showing the MLOps workflow from code change to deployed prediction.
+### 4. Train the model
+```
+python src/train.py
+```
 
----
-For any issues, check the troubleshooting section above or reach out for help.
+### 5. Evaluate the model
+```
+python src/evaluate.py
+```
+
+### 6. Run MLflow UI (optional)
+```
+mlflow ui
+```
+
+### 7. Run inference API locally
+```
+uvicorn src.app:app --reload
+```
+
+### 8. Build and run Docker container
+```
+docker build -t cats-vs-dogs-api .
+docker run -p 8000:8000 cats-vs-dogs-api
+```
+
+### 9. Deploy to Kubernetes (local cluster)
+```
+kubectl apply -f deployment/deployment.yaml
+kubectl apply -f deployment/service.yaml
+```
+
+### 10. Run smoke tests
+```
+python deployment/smoke_test.py
+```
+

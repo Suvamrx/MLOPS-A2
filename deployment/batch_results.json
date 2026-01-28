@@ -1,0 +1,50 @@
+[
+  {
+    "filename": "cat.4005.jpg",
+    "true_label": "cat",
+    "predicted_label": "cat",
+    "response": {
+      "label": "cat",
+      "probabilities": {
+        "cat": 0.5284026861190796,
+        "dog": 0.4715973734855652
+      }
+    }
+  },
+  {
+    "filename": "cat.4008.jpg",
+    "true_label": "cat",
+    "predicted_label": "cat",
+    "response": {
+      "label": "cat",
+      "probabilities": {
+        "cat": 0.9379425048828125,
+        "dog": 0.06205744296312332
+      }
+    }
+  },
+  {
+    "filename": "dog.4002.jpg",
+    "true_label": "dog",
+    "predicted_label": "cat",
+    "response": {
+      "label": "cat",
+      "probabilities": {
+        "cat": 0.7169181704521179,
+        "dog": 0.2830817997455597
+      }
+    }
+  },
+  {
+    "filename": "dog.4007.jpg",
+    "true_label": "dog",
+    "predicted_label": "dog",
+    "response": {
+      "label": "dog",
+      "probabilities": {
+        "cat": 0.04262090474367142,
+        "dog": 0.9573790431022644
+      }
+    }
+  }
+]
