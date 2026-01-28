@@ -1,0 +1,28 @@
+name: CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+      - name: Configure Kubeconfig
+        run: |
+          echo "$KUBECONFIG_CONTENT" > kubeconfig
+        env:
+          KUBECONFIG_CONTENT: ${{ secrets.KUBECONFIG_CONTENT }}
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl --kubeconfig=kubeconfig apply -f deployment/deployment.yaml
+          kubectl --kubeconfig=kubeconfig apply -f deployment/service.yaml
+      - name: Run smoke tests
+        run: |
+          pip install requests
+          python deployment/smoke_test.py
