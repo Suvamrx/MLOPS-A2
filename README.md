@@ -52,7 +52,16 @@ End-to-end MLOps pipeline for binary image classification (Cats vs Dogs) for a p
 ### 7. Automated Testing & CI
 - Added unit tests for preprocessing and model inference in `tests/`
 - Set up GitHub Actions workflow for CI: installs dependencies, runs tests, builds Docker image
+- Configured workflow to push Docker image to GitHub Container Registry (GHCR)
+- Fixed image tag case and permissions issues for GHCR
 - Pushed code to GitHub to trigger CI pipeline
+
+### 8. Kubernetes Deployment
+- Created `deployment/deployment.yaml` and `deployment/service.yaml` for Kubernetes
+- Applied manifests with `kubectl apply -f ...` to deploy the API on Docker Desktop Kubernetes
+- Verified pod and service status with `kubectl get pods` and `kubectl get svc`
+- Troubleshooted pod startup and image pull issues (waited for image pull, checked pod events)
+- Confirmed API is accessible at `http://localhost:30080/health`
 
 ## Issues Faced & Solutions
 - **DVC file ignored by git:**

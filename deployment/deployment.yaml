@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cats-vs-dogs-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cats-vs-dogs-api
+  template:
+    metadata:
+      labels:
+        app: cats-vs-dogs-api
+    spec:
+      containers:
+      - name: cats-vs-dogs-api
+        image: ghcr.io/suvamrx/mlops-a2-api:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: PORT
+          value: "8000"
