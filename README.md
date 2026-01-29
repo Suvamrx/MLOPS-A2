@@ -1,6 +1,7 @@
 # End-to-end MLOps pipeline for binary image classification (Cats vs Dogs) using PyTorch, FastAPI, DVC, Docker, and GitHub Actions. Includes data versioning, preprocessing, model training, experiment tracking, API packaging, containerization, automated testing, and CI/CD deployment. Suitable for pet adoption platforms and MLOps coursework.
 # Cats vs Dogs MLOps Pipeline
 
+## Author : **Suvam Pattnaik**
 ## Project Overview
 End-to-end MLOps pipeline for binary image classification (Cats vs Dogs) for a pet adoption platform. Includes data versioning, model training, experiment tracking, packaging, containerization, and CI/CD setup.
 
